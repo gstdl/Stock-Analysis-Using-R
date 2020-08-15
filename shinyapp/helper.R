@@ -23,7 +23,8 @@ library(quantmod)
 library(modeltime)
 
 
-df_ticker <- read.csv('data_input/tickers.csv', sep = ';')
+# df_ticker <- read.csv('data_input/tickers.csv', sep = ';')
+df_ticker <- read.csv('https://raw.githubusercontent.com/gstdl/Stock-Analysis-Using-R/master/shinyapp/data_input/tickers.csv', sep = ';')
 
 
 impute_ts <- function(x){

@@ -26,7 +26,7 @@ if(!'modeltime' %in% installed.packages()){
 ```
 
 
-```{r}
+```{r, results='hide', warning= FALSE, message=FALSE}
 library(highcharter)
 library(forecast)
 library(dplyr)
@@ -35,19 +35,19 @@ library(modeltime)
 ```
 
 
-```{r, warning= FALSE}
+```{r, results='hide', warning = FALSE, message=FALSE}
 tickers <- readxl::read_xlsx('data_input/Yahoo Ticker Symbols - September 2017.xlsx', sheet = 'Stock', col_names = FALSE)[-(1:4), c(1,2)]
+```
+
+```{r, warning= FALSE, message=FALSE}
 colnames(tickers) <- c('ticker_', 'name')
 ticker <- 'BBCA.JK'
 name <- tickers %>% filter(ticker_ == ticker) %>% pull(name) %>% toString()
 ticker
 name
 df <- getSymbols(ticker, auto.assign= FALSE)
-'----- head'
 head(df)
-'----- tail'
 tail(df)
-'----- summary'
 summary(df)
 ```
 

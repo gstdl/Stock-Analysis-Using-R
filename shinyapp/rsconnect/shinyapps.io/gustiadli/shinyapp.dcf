@@ -1,0 +1,12 @@
+name: shinyapp
+title: shinyapp
+username:
+account: gustiadli
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 2673319
+bundleId: 3519718
+url: https://gustiadli.shinyapps.io/shinyapp/
+when: 1597509380.46556
+asMultiple: FALSE
+asStatic: FALSE

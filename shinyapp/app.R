@@ -12,8 +12,10 @@ library(shinyjs)
 # Setup loading screen
 loading_screen <- tagList(
     spin_facebook(),
-    h4("Loading...")
+    h4("Brewing coffee for a minute...")
 )
+
+df_init <- readRDS('data_input/TSLA.rds')
 
 # Define UI for application that draws a histogram
 ui <- navbarPage(
@@ -44,8 +46,10 @@ ui <- navbarPage(
                         inputId = "tickerSelector", 
                         label = "Stock List (Pick One to Analyze)",
                         choices = paste(df_ticker$ticker, df_ticker$name, sep = ', '),
-                        selected = 'BBCA.JK, PT Bank Central Asia Tbk'
+                        selected = 'TSLA, Tesla, Inc.'
                     ),
+                    # dummy value for caching
+                    shinyjs::hidden(checkboxInput(inputId = 'cache', label = '', value = TRUE)),
                     shinyjs::hidden(
                         div(
                             id = 'optionsDiv',
@@ -80,7 +84,7 @@ ui <- navbarPage(
                                     inputId = 'long_ma',
                                     label = 'Long Moving Average',
                                     min = 100,
-                                    max = 366,
+                                    max = 365,
                                     value = 100,
                                     step = 1
                                 )
@@ -104,21 +108,33 @@ ui <- navbarPage(
     ),
     tabPanel(
         title = 'Predictions',
-        h1('COMING SOON')
+        h1('COMING SOON'),
+        tagList('Visit this ', 
+                a('Kanban Board', href='https://github.com/gstdl/Stock-Analysis-Using-R/projects/1'),
+                ' or star this ',
+                a('Github Repository', href='https://github.com/gstdl/Stock-Analysis-Using-R'),
+                ' for future updates.'
+        )
     )
 )
 
 
 # Define server logic required to draw a histogram
 server <- function(input, output, session) {
-    w <- Waiter$new(id = 'plot')
     
     show_volume <- reactive({any(input$optionsCheckbox == 'showVolume')})
     show_ma <- reactive({any(input$optionsCheckbox == 'showMA')})
     show_bbands <- reactive({any(input$optionsCheckbox == 'showBB')})
     show_rsi <- reactive({any(input$optionsCheckbox == 'showRSI')})
     show_macd <- reactive({any(input$optionsCheckbox == 'showMACD')})
-    ticker_split <- reactive({stringr::str_split_fixed(toString(input$tickerSelector), ', ', n = 2)})
+    ticker_split <- reactive({
+        z <- stringr::str_split_fixed(toString(input$tickerSelector), ', ', n = 2)
+        if (input$cache){
+            c(z[1], paste(z[2], '(up to July 30, 2020)'))
+        } else {
+            z
+        }
+    })
     
     observeEvent(input$short_ma, {
         updateSliderInput(session, "long_ma", min = input$short_ma + 10)
@@ -136,7 +152,20 @@ server <- function(input, output, session) {
         }
     }, ignoreNULL = FALSE)
     
-    df <- reactive({loadTickerDataFrame(ticker_split()[1])})
+    observeEvent(input$analyzeButton, {
+        updateCheckboxInput(session, 'cache', value = FALSE)
+    }, ignoreNULL = FALSE, ignoreInit = FALSE)
+    
+    
+    df <- reactive({
+        if (input$cache){
+            df_init
+        } else {
+            getSymbols(ticker_split()[1], auto.assign= FALSE, from = Sys.Date() - 365 * 3) %>% na.approx()
+        }
+    })
+    
+    
     short_ma <- reactive({
         if (input$SMAorEMA == 'sma'){
             SMA(df()[, 4], input$short_ma)

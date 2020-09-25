@@ -1,26 +1,29 @@
-options("repos" = c("CRAN" = "https://cran.rstudio.com", 
-                    "http://www.omegahat.net/R" = "http://www.omegahat.net/R"))
-
 packs <- c('dplyr', 'quantmod', 'devtools', 'forecast', 'shiny', 'shinythemes', 'stringr', 'shinycssloaders', 'waiter', 'shinyjs')
 packs_to_install <- packs[!(packs %in% installed.packages())]
+if('forecast' %in% packs_to_install){
+  install.packages('lattice')
+}
 if(length(packs_to_install) > 0){
   install.packages(packs_to_install)
 }
 if(!'highcharter' %in% installed.packages()){
-  install.packages("XML", repos = "http://www.omegahat.net/R")
+  # R 3.6
+  # install.packages("XML", repos = "http://www.omegahat.net/R")
+  install.packages('XML')
   install.packages('rlist')
+  install.packages('igraph')
   devtools::install_github("jbkunst/highcharter")
 }
-if(!'modeltime' %in% installed.packages()){
-  devtools::install_github("business-science/modeltime")
-}
+# if(!'modeltime' %in% installed.packages()){
+#   devtools::install_github("business-science/modeltime")
+# }
 
 
 library(highcharter)
 library(forecast)
 library(dplyr)
 library(quantmod)
-library(modeltime)
+# library(modeltime)
 
 
 # df_ticker <- read.csv('data_input/tickers.csv', sep = ';')

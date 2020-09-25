@@ -20,9 +20,9 @@ if(!'highcharter' %in% installed.packages()){
   install.packages('rlist')
   devtools::install_github("jbkunst/highcharter")
 }
-if(!'modeltime' %in% installed.packages()){
-  devtools::install_github("business-science/modeltime")
-}
+# if(!'modeltime' %in% installed.packages()){
+#   devtools::install_github("business-science/modeltime")
+# }
 ```
 
 
@@ -31,7 +31,7 @@ library(highcharter)
 library(forecast)
 library(dplyr)
 library(quantmod)
-library(modeltime)
+# library(modeltime)
 ```
 
 

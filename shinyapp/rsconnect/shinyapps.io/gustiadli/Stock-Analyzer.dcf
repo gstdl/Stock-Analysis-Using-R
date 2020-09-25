@@ -4,9 +4,10 @@ username:
 account: gustiadli
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
-appId: 2673296
-bundleId: 3519746
+appId: 2674131
+bundleId: 3520774
 url: https://gustiadli.shinyapps.io/Stock-Analyzer/
-when: 1597510287.48696
+when: 1597546369.68152
 asMultiple: FALSE
 asStatic: FALSE
+ignoredFiles: .RData|init_cache.R|data_input/tickers.csv
